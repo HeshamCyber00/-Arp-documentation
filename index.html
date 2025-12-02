@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>ARP Spoofing Detection Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background: #0d1117;
+        color: #e6edf3;
+        font-family: Arial, sans-serif;
+        line-height: 1.9;
+    }
+    h1, h2, h3 {
+        color: #58a6ff;
+    }
+    .section {
+        background: #161b22;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #30363d;
+        margin-bottom: 40px;
+    }
+    img {
+        width: 100%;
+        border-radius: 10px;
+        margin-top: 15px;
+        border: 1px solid #30363d;
+    }
+    code {
+        background: #21262d;
+        padding: 5px 8px;
+        border-radius: 6px;
+        color: #9ae1ff;
+        direction: ltr;
+        display: inline-block;
+    }
+    pre {
+        background: #21262d;
+        padding: 15px;
+        border-radius: 10px;
+        color: #9ae1ff;
+        border: 1px solid #30363d;
+        direction: ltr;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container mt-5">
+
+    <h1 class="text-center mb-4">📡 ARP Spoofing Detection & Defense — التوثيق الكامل</h1>
+
+    <!-- Section 1 -->
+    <div class="section">
+        <h2>📌 مقدمة عن المشروع</h2>
+
+        <p>
+            هذا المشروع يقوم بمراقبة شبكة الـ LAN واكتشاف هجمات 
+            <span dir="ltr">ARP Spoofing / ARP Poisoning</span>
+            باستخدام مكتبات 
+            <span dir="ltr">Python</span>
+            و
+            <span dir="ltr">Scapy</span>.
+        </p>
+
+        <p>
+            عند اكتشاف أي محاولة هجوم، يتم تسجيل البيانات في ملف Log وعرضها في
+            لوحة تحكم تفاعلية 
+            <span dir="ltr">Dashboard</span>
+            مبنية باستخدام إطار العمل 
+            <span dir="ltr">Flask</span>.
+        </p>
+
+        <p>
+            يتم أيضًا تشغيل تنبيه صوتي وفلاش أحمر للتنبيه،
+            بالإضافة إلى القدرة على إرسال 
+            <span dir="ltr">ARP Packets</span>
+            صحيحة لإصلاح الـ ARP Table وحماية الأجهزة من التسميم.
+        </p>
+
+        <img src="images/intro.jpg" alt="intro">
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section">
+        <h2>🧩 مكونات المشروع</h2>
+        <ul>
+            <li>🟦 Python 3</li>
+            <li>🟨 Scapy لتحليل الـ Packets</li>
+            <li>🟩 Flask لإنشاء الـ Dashboard</li>
+            <li>🔊 تنبيه صوتي + فلاش</li>
+            <li>🛡 وضع الحماية (إرسال ARP صحيحة)</li>
+        </ul>
+
+        <img src="images/project-structure.jpg" alt="Structure">
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section">
+        <h2>🔧 تشغيل المشروع</h2>
+        <pre><code>py arp_detector.py
+py app.py   # تشغيل لوحة التحكم</code></pre>
+
+        <img src="images/run.jpg" alt="Run">
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section">
+        <h2>📊 شكل الداشبورد</h2>
+        <p>تعرض الداشبورد جميع الهجمات المكتشفة مع الوقت و MAC الحقيقي والمزور.</p>
+
+        <img src="images/dashboard.jpg" alt="Dashboard">
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section">
+        <h2>⚠️ شكل التحذير</h2>
+
+        <p>
+            عند اكتشاف هجوم، يتم:
+            <br>🟥 تشغيل فلاش أحمر  
+            <br>🔊 تشغيل صوت <span dir="ltr">alert.mp3</span>  
+            <br>📌 إضافة الهجمة للجدول مباشرة
+        </p>
+
+        <img src="images/alert.jpg" alt="Alert Example">
+    </div>
+
+    <!-- Section 6 -->
+    <div class="section">
+        <h2>🛡 نظام الحماية (Defense Mode)</h2>
+
+        <p>
+            يتم إرسال ARP Packet صحيحة إلى جهاز الضحية لإعادة ضبط الـ ARP Table
+            وحمايته من هجمات الـ MITM.
+        </p>
+
+        <pre><code>send(ARP(op=2, pdst=victim_ip, psrc=gateway, hwsrc=real_mac))</code></pre>
+
+        <img src="images/defense.jpg" alt="Defense">
+    </div>
+
+    <!-- Section 7 -->
+    <div class="section">
+        <h2>🧪 خطوات اختبار الهجمة (Testing)</h2>
+
+        <h4>1️⃣ إعداد الأجهزة</h4>
+        <ul>
+            <li>جهازك (الـ Dashboard + Detector)</li>
+            <li>جهاز الضحية (Laptop / Phone)</li>
+            <li>كالي لينكس داخل VM للهجوم</li>
+        </ul>
+
+        <h4>2️⃣ فحص الشبكة للحصول على IPs</h4>
+        <pre><code>nmap -sn 192.168.1.0/24</code></pre>
+
+        <h4>3️⃣ تنفيذ الهجوم من كالي</h4>
+        <pre><code>arpspoof -i eth0 -t VICTIM_IP GATEWAY_IP</code></pre>
+
+        <h4>4️⃣ راقب نتائج الهجوم</h4>
+        <p>
+            ستظهر الهجمات مباشرة في لوحة التحكم،
+            وسيتم تشغيل الصوت والفلاش وحفظ الهجمة في ملف Log.
+        </p>
+
+        <img src="images/test.jpg" alt="Test">
+    </div>
+
+    <!-- Section 8 -->
+    <div class="section">
+        <h2>📥 تحميل المشروع</h2>
+        <p>
+            يمكنك زيارة مشروع GitHub عبر الرابط التالي:
+            <br>
+            <a href="#" style="color:#58a6ff;">🔗 GitHub Repository</a>
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
